@@ -7,13 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		462BC3CD22D1ED7A00A8D699 /* AnyCellProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BC3CC22D1ED7A00A8D699 /* AnyCellProvider.swift */; };
+		462BC3D322D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BC3D222D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift */; };
 		46BDE68122CB45DC008CF000 /* FlooidCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 46BDE67F22CB45DC008CF000 /* FlooidCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		46FF95FD22D0CF2000A9F72F /* CellProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FF95FC22D0CF2000A9F72F /* CellProvider.swift */; };
+		46FF960122D0CF3500A9F72F /* CollectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FF960022D0CF3500A9F72F /* CollectionProvider.swift */; };
+		46FF960322D0CF4100A9F72F /* ItemsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FF960222D0CF4100A9F72F /* ItemsGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		462BC3CC22D1ED7A00A8D699 /* AnyCellProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCellProvider.swift; sourceTree = "<group>"; };
+		462BC3D222D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+DiffingAnimation.swift"; sourceTree = "<group>"; };
 		46BDE67C22CB45DC008CF000 /* FlooidCollection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlooidCollection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		46BDE67F22CB45DC008CF000 /* FlooidCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlooidCollection.h; sourceTree = "<group>"; };
 		46BDE68022CB45DC008CF000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		46FF95FC22D0CF2000A9F72F /* CellProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellProvider.swift; sourceTree = "<group>"; };
+		46FF960022D0CF3500A9F72F /* CollectionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionProvider.swift; sourceTree = "<group>"; };
+		46FF960222D0CF4100A9F72F /* ItemsGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsGenerator.swift; sourceTree = "<group>"; };
+		46FF960A22D0DEA100A9F72F /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
+		46FF960B22D0DEA100A9F72F /* FlooidCollection.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = FlooidCollection.podspec; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,10 +58,25 @@
 		46BDE67E22CB45DC008CF000 /* FlooidCollection */ = {
 			isa = PBXGroup;
 			children = (
+				46FF95F922D0CEEA00A9F72F /* Source */,
 				46BDE67F22CB45DC008CF000 /* FlooidCollection.h */,
+				46FF960B22D0DEA100A9F72F /* FlooidCollection.podspec */,
+				46FF960A22D0DEA100A9F72F /* Package.swift */,
 				46BDE68022CB45DC008CF000 /* Info.plist */,
 			);
 			path = FlooidCollection;
+			sourceTree = "<group>";
+		};
+		46FF95F922D0CEEA00A9F72F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				46FF960022D0CF3500A9F72F /* CollectionProvider.swift */,
+				46FF95FC22D0CF2000A9F72F /* CellProvider.swift */,
+				462BC3CC22D1ED7A00A8D699 /* AnyCellProvider.swift */,
+				46FF960222D0CF4100A9F72F /* ItemsGenerator.swift */,
+				462BC3D222D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,6 +122,7 @@
 				TargetAttributes = {
 					46BDE67B22CB45DC008CF000 = {
 						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1100;
 					};
 				};
 			};
@@ -131,6 +159,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46FF960322D0CF4100A9F72F /* ItemsGenerator.swift in Sources */,
+				46FF95FD22D0CF2000A9F72F /* CellProvider.swift in Sources */,
+				462BC3CD22D1ED7A00A8D699 /* AnyCellProvider.swift in Sources */,
+				462BC3D322D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift in Sources */,
+				46FF960122D0CF3500A9F72F /* CollectionProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +293,7 @@
 		46BDE68522CB45DC008CF000 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 68289M92U2;
@@ -276,6 +310,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mart.FlooidCollection;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -284,6 +319,7 @@
 		46BDE68622CB45DC008CF000 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 68289M92U2;
