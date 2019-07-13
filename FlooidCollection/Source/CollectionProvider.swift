@@ -19,7 +19,7 @@ open class CollectionProvider: NSObject {
     private var sections: [Section] = []
     private var sectionsLoader: () -> [Section]
     
-    private weak var collectionView: UICollectionView!
+    private weak var collectionView: UICollectionView?
     
     public init(with sectionsLoader: @autoclosure @escaping () -> [Section]) {
         self.sectionsLoader = sectionsLoader
@@ -27,8 +27,8 @@ open class CollectionProvider: NSObject {
     }
     
     public func provide(for collectionView: UICollectionView) {
+        collectionView.dataSource = self
         self.collectionView = collectionView
-        self.collectionView.dataSource = self
         self.sections = self.sectionsLoader()
     }
     
@@ -53,9 +53,14 @@ open class CollectionProvider: NSObject {
         self.sections = self.sectionsLoader()
         let new = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
         
-        self.collectionView.update(old: old, new: new, animations: {
-            for indexPath in self.collectionView.indexPathsForVisibleItems {
-                if let cell = self.collectionView.cellForItem(at: indexPath) {
+        guard let collectionView = self.collectionView else {
+            completed()
+            return
+        }
+        
+        collectionView.update(old: old, new: new, animations: {
+            for indexPath in collectionView.indexPathsForVisibleItems {
+                if let cell = collectionView.cellForItem(at: indexPath) {
                     self[indexPath].setup(cell)
                 }
             }
