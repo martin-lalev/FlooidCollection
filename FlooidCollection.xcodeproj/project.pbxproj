@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		462BC3CD22D1ED7A00A8D699 /* AnyCellProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BC3CC22D1ED7A00A8D699 /* AnyCellProvider.swift */; };
 		462BC3D322D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BC3D222D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift */; };
+		4669F1C6246FFD400041CF9C /* ProvidedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4669F1C5246FFD400041CF9C /* ProvidedCollectionView.swift */; };
 		46BDE68122CB45DC008CF000 /* FlooidCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 46BDE67F22CB45DC008CF000 /* FlooidCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		46FF95FD22D0CF2000A9F72F /* CellProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FF95FC22D0CF2000A9F72F /* CellProvider.swift */; };
 		46FF960122D0CF3500A9F72F /* CollectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FF960022D0CF3500A9F72F /* CollectionProvider.swift */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		462BC3CC22D1ED7A00A8D699 /* AnyCellProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCellProvider.swift; sourceTree = "<group>"; };
 		462BC3D222D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+DiffingAnimation.swift"; sourceTree = "<group>"; };
+		4669F1C5246FFD400041CF9C /* ProvidedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidedCollectionView.swift; sourceTree = "<group>"; };
 		46BDE67C22CB45DC008CF000 /* FlooidCollection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlooidCollection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		46BDE67F22CB45DC008CF000 /* FlooidCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlooidCollection.h; sourceTree = "<group>"; };
 		46BDE68022CB45DC008CF000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 		46FF95F922D0CEEA00A9F72F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4669F1C5246FFD400041CF9C /* ProvidedCollectionView.swift */,
 				46FF960022D0CF3500A9F72F /* CollectionProvider.swift */,
 				46FF95FC22D0CF2000A9F72F /* CellProvider.swift */,
 				462BC3CC22D1ED7A00A8D699 /* AnyCellProvider.swift */,
@@ -164,6 +167,7 @@
 				462BC3CD22D1ED7A00A8D699 /* AnyCellProvider.swift in Sources */,
 				462BC3D322D333EF00A8D699 /* UICollectionView+DiffingAnimation.swift in Sources */,
 				46FF960122D0CF3500A9F72F /* CollectionProvider.swift in Sources */,
+				4669F1C6246FFD400041CF9C /* ProvidedCollectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
