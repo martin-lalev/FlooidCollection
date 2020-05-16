@@ -48,16 +48,25 @@ open class CollectionProvider: NSObject {
     
     // MARK: - Reloading
 
-    public func reloadData(_ completed: @escaping () -> Void = { }) {
+    public func reloadData(otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
         let old = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
         self.sections = self.sectionsLoader()
         let new = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
         
-        if let collectionView = self.collectionView {
-            collectionView.update(old: old, new: new, completed)
-        } else {
+        guard let collectionView = self.collectionView else {
             completed()
+            return
         }
+        
+        collectionView.update(old: old, new: new, animations: {
+            for indexPath in collectionView.indexPathsForVisibleItems {
+                if let cell = collectionView.cellForItem(at: indexPath) {
+                    self[indexPath].setup(cell)
+                }
+            }
+            otherAnimations()
+            
+        }, completed)
     }
 }
 

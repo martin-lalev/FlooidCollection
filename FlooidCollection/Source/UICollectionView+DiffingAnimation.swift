@@ -11,8 +11,21 @@ import UIKit
 
 extension UICollectionView {
     
-    func update(old: [(String, [String])], new: [(String, [String])], _ completed: @escaping () -> Void = { }) {
-        self.performBatchUpdates({
+    private func update(changes: () -> Void, animations: @escaping () -> Void, _ completed: @escaping () -> Void = { }) {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock(completed)
+        
+        self.performBatchUpdates(changes)
+        
+        let duration = CATransaction.animationDuration();
+        CATransaction.commit();
+        
+        UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction], animations: animations)
+    }
+    
+    func update(old: [(String, [String])], new: [(String, [String])], animations: @escaping () -> Void, _ completed: @escaping () -> Void = { }) {
+        self.update(changes: {
+            
             let sectionsFrom = old.map { $0.0 }
             let sectionsTo = new.map { $0.0 }
             
@@ -25,7 +38,7 @@ extension UICollectionView {
                 
                 self.applyToCells(Changes.make(from: cellsFrom, to: cellsTo), at: sectionIndex)
             }
-        }, completion: { _ in completed() })
+        }, animations: animations, completed)
     }
     
     private func applyToSections(_ changes: Changes) {
