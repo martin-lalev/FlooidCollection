@@ -10,7 +10,16 @@ import Foundation
 
 open class ProvidedCollectionView: UICollectionView {
     
-    private(set) public var collectionProvider = CollectionProvider(with: { _ in })
+    private(set) public var collectionProvider = CollectionProvider()
+    
+    public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: layout)
+        self.provide()
+    }
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.provide()
+    }
     
     open func register(_ cellTypes: [IdentifiableCell.Type] = []) {
         for cellType in cellTypes {
@@ -20,9 +29,10 @@ open class ProvidedCollectionView: UICollectionView {
     open func register(_ cellTypes: IdentifiableCell.Type ...) {
         self.register(cellTypes)
     }
-    open func provide(_ maker: @escaping (ItemsGenerator<CollectionProvider.Section>) -> Void) {
-        self.collectionProvider = CollectionProvider(with: maker)
-        self.collectionProvider.provide(for: self)
+    func provide() {
+        DispatchQueue.main.async {
+            self.collectionProvider.provide(for: self)
+        }
     }
 
 }

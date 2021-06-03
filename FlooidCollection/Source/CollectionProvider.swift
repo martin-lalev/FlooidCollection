@@ -17,19 +17,12 @@ open class CollectionProvider: NSObject {
     }
 
     private var sections: [Section] = []
-    private var sectionsLoader: () -> [Section]
     
     private weak var collectionView: UICollectionView?
-    
-    public init(with sectionsLoader: @autoclosure @escaping () -> [Section]) {
-        self.sectionsLoader = sectionsLoader
-        super.init()
-    }
     
     public func provide(for collectionView: UICollectionView) {
         collectionView.dataSource = self
         self.collectionView = collectionView
-        self.sections = self.sectionsLoader()
     }
     
     
@@ -48,9 +41,9 @@ open class CollectionProvider: NSObject {
     
     // MARK: - Reloading
 
-    public func reloadData(otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
+    public func reloadData(sections: [Section], otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
         let old = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
-        self.sections = self.sectionsLoader()
+        self.sections = sections
         let new = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
         
         guard let collectionView = self.collectionView else {

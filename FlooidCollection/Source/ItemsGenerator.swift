@@ -38,8 +38,8 @@ public class ItemsGenerator<Item> {
 // MARK: - Helpers
 
 public extension CollectionProvider {
-    convenience init(with maker: @escaping (ItemsGenerator<CollectionProvider.Section>) -> Void) {
-        self.init(with: List(maker))
+    func reloadData(with maker: @escaping (ItemsGenerator<CollectionProvider.Section>) -> Void, otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
+        self.reloadData(sections: List(maker), otherAnimations: otherAnimations, completed: completed)
     }
 }
 
