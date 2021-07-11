@@ -10,23 +10,16 @@ import Foundation
 import UIKit
 
 public class AnyCellProvider<CellType: IdentifiableCell>: CellProvider {
-    
-    private let setup: (CellType)->Void
-    
-    public let identifier: String
-    
-    public init(identifier: String, setup: @escaping (CellType)->Void) {
-        self.identifier = identifier
-        self.setup = setup
-    }
-    
-    public var reuseIdentifier: String {
-        return CellType.reuseIdentifier
-    }
 
-    public func setup(_ cell: UICollectionViewCell) {
-        guard let cell = cell as? CellType else { return }
-        self.setup(cell)
+    public init(identifier: String, reuseIdentifier: String = CellType.reuseIdentifier, setup: @escaping (CellType)->Void) {
+        super.init(
+            identifier: identifier,
+            reuseIdentifier: reuseIdentifier,
+            setup: {
+                guard let cell = $0 as? CellType else { return }
+                setup(cell)
+            }
+        )
     }
 
 }

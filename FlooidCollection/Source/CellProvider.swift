@@ -14,11 +14,21 @@ public protocol IdentifiableCell: UICollectionViewCell {
     static func register(in view: UICollectionView)
 }
 
-public protocol CellProvider {
+public class CellProvider {
     
-    var identifier: String { get }
-    var reuseIdentifier: String { get }
+    private let setup: (UICollectionViewCell)->Void
+    
+    public let identifier: String
+    public let reuseIdentifier: String
+    
+    public init(identifier: String, reuseIdentifier: String, setup: @escaping (UICollectionViewCell)->Void) {
+        self.identifier = identifier
+        self.reuseIdentifier = reuseIdentifier
+        self.setup = setup
+    }
+    
+    public func setup(_ cell: UICollectionViewCell) {
+        self.setup(cell)
+    }
 
-    func setup(_ cell: UICollectionViewCell)
-    
 }

@@ -9,64 +9,62 @@
 import Foundation
 import UIKit
 
-public class ItemsGenerator<Item> {
-    
-    var items: [Item] = []
-    init() { }
-    
-    @discardableResult
-    public func append(_ provider: Item) -> ItemsGenerator {
-        self.items.append(provider)
-        return self
-    }
-    
-    @discardableResult
-    public func append(_ provider: Item?) -> ItemsGenerator {
-        guard let provider = provider else { return self }
-        self.items.append(provider)
-        return self
-    }
-    
-    @discardableResult
-    public func append(_ providers: [Item]) -> ItemsGenerator {
-        self.items.append(contentsOf: providers)
-        return self
-    }
+// MARK: - Cells Array Builder
+
+public protocol CollectionViewCellArrayConvertible {
+    func items() -> [CellProvider]
+}
+extension CellProvider: CollectionViewCellArrayConvertible {
+    public func items() -> [CellProvider] { [self] }
+}
+extension Array: CollectionViewCellArrayConvertible where Element: CellProvider {
+    public func items() -> [CellProvider] { self }
 }
 
+@resultBuilder
+public struct CollectionViewCellsArrayBuilder {
 
-// MARK: - Helpers
+    public static func buildBlock(_ components: CollectionViewCellArrayConvertible ...) -> CollectionViewCellArrayConvertible { components.flatMap { $0.items() } }
+
+    public static func buildIf(_ component: CollectionViewCellArrayConvertible?) -> CollectionViewCellArrayConvertible { component ?? [CellProvider]() }
+
+    public static func buildEither(first: CollectionViewCellArrayConvertible) -> CollectionViewCellArrayConvertible { first }
+
+    public static func buildEither(second: CollectionViewCellArrayConvertible) -> CollectionViewCellArrayConvertible { second }
+
+}
+
+public func Section(_ identifier: String, @CollectionViewCellsArrayBuilder _ viewBuilder: () -> CollectionViewCellArrayConvertible) -> CollectionProvider.Section {
+    return CollectionProvider.Section(identifier: identifier, cellProviders: viewBuilder().items())
+}
+
+// MARK: - Sections Array Builder
+
+public protocol CollectionViewSectionArrayConvertible {
+    func items() -> [CollectionProvider.Section]
+}
+extension CollectionProvider.Section: CollectionViewSectionArrayConvertible {
+    public func items() -> [CollectionProvider.Section] { [self] }
+}
+extension Array: CollectionViewSectionArrayConvertible where Element == CollectionProvider.Section {
+    public func items() -> [CollectionProvider.Section] { self }
+}
+
+@resultBuilder
+public struct CollectionViewSectionsArrayBuilder {
+    
+    public static func buildBlock(_ components: CollectionViewSectionArrayConvertible ...) -> CollectionViewSectionArrayConvertible { components.flatMap { $0.items() } }
+    
+    public static func buildIf(_ component: CollectionViewSectionArrayConvertible?) -> CollectionViewSectionArrayConvertible { component ?? [CollectionProvider.Section]() }
+    
+    public static func buildEither(first: CollectionViewSectionArrayConvertible) -> CollectionViewSectionArrayConvertible { first }
+    
+    public static func buildEither(second: CollectionViewSectionArrayConvertible) -> CollectionViewSectionArrayConvertible { second }
+    
+}
 
 public extension CollectionProvider {
-    func reloadData(with maker: @escaping (ItemsGenerator<CollectionProvider.Section>) -> Void, otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
-        self.reloadData(sections: List(maker), otherAnimations: otherAnimations, completed: completed)
-    }
-}
-
-public func Section(_ identifier: String, _ maker: (ItemsGenerator<CellProvider>) -> Void) -> CollectionProvider.Section {
-    return CollectionProvider.Section(identifier: identifier, cellProviders: List(maker))
-}
-
-public func List<Item>(_ maker: (ItemsGenerator<Item>) -> Void) -> [Item] {
-    let generator: ItemsGenerator<Item> = ItemsGenerator()
-    maker(generator)
-    return generator.items
-}
-
-public func If<Item>(_ expression: Bool, then: (ItemsGenerator<Item>) -> Void = { _ in }, `else`: (ItemsGenerator<Item>) -> Void = { _ in }) -> [Item] {
-    if expression {
-        return List(then)
-    } else {
-        return List(`else`)
-    }
-}
-
-public func Unwrap<Item, T>(_ value: T?, then: (ItemsGenerator<Item>, T) -> Void = { _, _ in }, `else`: (ItemsGenerator<Item>) -> Void = { _ in }) -> [Item] {
-    if let value = value {
-        let generator: ItemsGenerator<Item> = ItemsGenerator()
-        then(generator, value)
-        return generator.items
-    } else {
-        return List(`else`)
+    func reloadData(@CollectionViewSectionsArrayBuilder with maker: @escaping () -> CollectionViewSectionArrayConvertible, otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
+        self.reloadData(sections: maker().items(), otherAnimations: otherAnimations, completed: completed)
     }
 }
