@@ -1,20 +1,14 @@
 //
-//  CellProvider.swift
+//  CollectionCellProvider.swift
 //  FlooidCollection
 //
-//  Created by Martin Lalev on 6.07.19.
-//  Copyright © 2019 Martin Lalev. All rights reserved.
+//  Created by Martin Lalev on 11/07/2021.
+//  Copyright © 2021 Martin Lalev. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-public protocol IdentifiableCell: UICollectionViewCell {
-    static var reuseIdentifier: String { get }
-    static func register(in view: UICollectionView)
-}
-
-public class CellProvider {
+public struct CollectionCellProvider {
     
     private let setup: (UICollectionViewCell)->Void
     
@@ -31,4 +25,8 @@ public class CellProvider {
         self.setup(cell)
     }
 
+}
+
+extension CollectionCellProvider: Identifiable {
+    public var id: String { self.identifier }
 }

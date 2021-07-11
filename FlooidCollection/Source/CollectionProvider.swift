@@ -6,17 +6,11 @@
 //  Copyright © 2019 Martin Lalev. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 open class CollectionProvider: NSObject {
     
-    public struct Section {
-        public let identifier: String
-        public let cellProviders: [CellProvider]
-    }
-
-    private var sections: [Section] = []
+    private var sections: [CollectionSectionProvider] = []
     
     private weak var collectionView: UICollectionView?
     
@@ -29,11 +23,11 @@ open class CollectionProvider: NSObject {
     
     // MARK: - Private helpers
     
-    subscript(_ indexPath: IndexPath) -> CellProvider {
+    subscript(_ indexPath: IndexPath) -> CollectionCellProvider {
         return self[indexPath.section].cellProviders[indexPath.row]
     }
     
-    subscript(_ index: Int) -> Section {
+    subscript(_ index: Int) -> CollectionSectionProvider {
         return self.sections[index]
     }
 
@@ -41,7 +35,7 @@ open class CollectionProvider: NSObject {
     
     // MARK: - Reloading
 
-    public func reloadData(sections: [Section], otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
+    public func reloadData(sections: [CollectionSectionProvider], otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
         let old = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
         self.sections = sections
         let new = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
