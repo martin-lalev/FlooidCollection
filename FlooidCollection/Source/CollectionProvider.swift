@@ -35,17 +35,32 @@ open class CollectionProvider: NSObject {
     
     // MARK: - Reloading
 
+    private let lock = NSLock()
+
     public func reloadData(sections: [CollectionSectionProvider], otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
-        let old = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
-        self.sections = sections
-        let new = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
-        
         guard let collectionView = self.collectionView else {
             completed()
             return
         }
         
-        collectionView.update(old: old, new: new, animations: {
+        if sections.isEmpty {
+            let changes = TableChanges.make(currentSections: self.sections, updatedSections: sections)
+            self.sections = sections
+            self.update(collectionView, with: changes, otherAnimations: otherAnimations, completed: completed)
+        } else {
+            DispatchQueue.global(qos: .userInteractive).async {
+                self.lock.lock()
+                let changes = TableChanges.make(currentSections: self.sections, updatedSections: sections)
+                DispatchQueue.main.async {
+                    self.sections = sections
+                    self.update(collectionView, with: changes, otherAnimations: otherAnimations, completed: completed)
+                    self.lock.unlock()
+                }
+            }
+        }
+    }
+    private func update(_ collectionView: UICollectionView, with changes: TableChanges, otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
+        collectionView.update(changes: changes, animations: {
             for indexPath in collectionView.indexPathsForVisibleItems {
                 if let cell = collectionView.cellForItem(at: indexPath) {
                     self[indexPath].setup(cell)
@@ -54,6 +69,15 @@ open class CollectionProvider: NSObject {
             otherAnimations()
             
         }, completed)
+    }
+}
+
+extension TableChanges {
+    static func make(currentSections: [CollectionSectionProvider], updatedSections: [CollectionSectionProvider]) -> TableChanges {
+        return .make(
+            old: currentSections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) },
+            new: updatedSections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
+        )
     }
 }
 
