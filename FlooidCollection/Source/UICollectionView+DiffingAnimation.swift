@@ -40,20 +40,6 @@ extension UICollectionView {
         }, animations: animations, completed)
     }
     
-    func update(changes: TableChanges, animations: @escaping () -> Void, _ completed: @escaping () -> Void = { }) {
-        guard !changes.isEmpty else {
-            UIView.animate(withDuration: 0.2, delay: 0, options: [.allowUserInteraction], animations: animations)
-            return completed()
-        }
-        self.update(changes: {
-            self.applyToSections(changes.sectionChanges)
-            
-            for (sectionIndex, changes) in changes.rowChanges {
-                self.applyToCells(changes, at: sectionIndex)
-            }
-        }, animations: animations, completed)
-    }
-
     private func applyToSections(_ changes: Changes) {
         self.deleteSections(IndexSet(changes.deleted))
         self.insertSections(IndexSet(changes.inserted))
@@ -74,7 +60,7 @@ struct Changes {
     let inserted: [Int]
     let moved: [(from: Int, to: Int)]
     
-    static func make<H: Hashable>(from old:[H], to new:[H]) -> Changes {
+    static func make(from old:[String], to new:[String]) -> Changes {
         let removedItems = Set(old).subtracting(new)
         let addedItems = Set(new).subtracting(old)
         
@@ -94,37 +80,5 @@ struct Changes {
                 return (from: j, to: $0.offset)
             }
         )
-    }
-    
-    var isEmpty: Bool {
-        return deleted.isEmpty && inserted.isEmpty && moved.isEmpty
-    }
-}
-
-struct TableChanges {
-    let sectionChanges: Changes
-    let rowChanges: [(Int, Changes)]
-    
-    var isEmpty: Bool {
-        return self.sectionChanges.isEmpty && self.rowChanges.reduce(into: true, { $0 = $0 && $1.1.isEmpty })
-    }
-}
-
-extension TableChanges {
-    static func make<HS: Hashable, HC: Hashable>(old: [(HS, [HC])], new: [(HS, [HC])]) -> TableChanges {
-
-        let sectionsFrom = old.map { $0.0 }
-        let sectionsTo = new.map { $0.0 }
-
-        let sectionChanges = Changes.make(from: sectionsFrom, to: sectionsTo)
-        
-        let rowChanges = Set(sectionsTo).intersection(sectionsFrom).map { sectionIdentifier -> (Int, Changes) in
-            let sectionIndex = new.firstIndex(where: { $0.0 == sectionIdentifier })!
-            let cellsFrom = old.first(where: { $0.0 == sectionIdentifier })!.1
-            let cellsTo = new.first(where: { $0.0 == sectionIdentifier })!.1
-            return (sectionIndex, Changes.make(from: cellsFrom, to: cellsTo))
-        }
-        
-        return .init(sectionChanges: sectionChanges, rowChanges: rowChanges)
     }
 }
