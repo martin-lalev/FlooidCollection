@@ -36,9 +36,9 @@ open class CollectionProvider: NSObject {
     // MARK: - Reloading
 
     public func reloadData(sections: [CollectionSectionProvider], otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
-        let old = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
+        let old = self.sections.map { $0.asDiffableSection() }
         self.sections = sections
-        let new = self.sections.map { ($0.identifier, $0.cellProviders.map { $0.identifier }) }
+        let new = self.sections.map { $0.asDiffableSection() }
         
         guard let collectionView = self.collectionView else {
             completed()
@@ -73,4 +73,15 @@ extension CollectionProvider: UICollectionViewDataSource {
         return cell
     }
     
+}
+
+private extension CollectionSectionProvider {
+    func asDiffableSection() -> DiffableCollectionSection {
+        DiffableCollectionSection(
+            identifier: self.identifier,
+            cellIdentifiers: self.cellProviders.map { $0.identifier },
+            widthIdentifiers: self.cellProviders.map { $0.widthIdentifier },
+            heightIdentifiers: self.cellProviders.map { $0.heightIdentifier }
+        )
+    }
 }

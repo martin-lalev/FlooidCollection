@@ -22,18 +22,20 @@ extension UICollectionView {
         UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction], animations: animations)
     }
     
-    func update(old: [(String, [String])], new: [(String, [String])], animations: @escaping () -> Void, _ completed: @escaping () -> Void = { }) {
+    func update(old: [DiffableCollectionSection], new: [DiffableCollectionSection], animations: @escaping () -> Void, _ completed: @escaping () -> Void = { }) {
+        guard old != new else { return completed() }
+
         self.update(changes: {
             
-            let sectionsFrom = old.map { $0.0 }
-            let sectionsTo = new.map { $0.0 }
+            let sectionsFrom = old.map { $0.identifier }
+            let sectionsTo = new.map { $0.identifier }
             
             self.applyToSections(Changes.make(from: sectionsFrom, to: sectionsTo))
             
             for sectionIdentifier in Set(sectionsTo).intersection(sectionsFrom) {
-                let sectionIndex = new.firstIndex(where: { $0.0 == sectionIdentifier })!
-                let cellsFrom = old.first(where: { $0.0 == sectionIdentifier })!.1
-                let cellsTo = new.first(where: { $0.0 == sectionIdentifier })!.1
+                let sectionIndex = new.firstIndex(where: { $0.identifier == sectionIdentifier })!
+                let cellsFrom = old.first(where: { $0.identifier == sectionIdentifier })!.cellIdentifiers
+                let cellsTo = new.first(where: { $0.identifier == sectionIdentifier })!.cellIdentifiers
                 
                 self.applyToCells(Changes.make(from: cellsFrom, to: cellsTo), at: sectionIndex)
             }
@@ -52,6 +54,13 @@ extension UICollectionView {
         for move in changes.moved { self.moveItem(at: IndexPath(row: move.from, section: sectionIndex), to: IndexPath(row: move.to, section: sectionIndex)) }
     }
     
+}
+
+struct DiffableCollectionSection: Equatable {
+    let identifier: String
+    let cellIdentifiers: [String]
+    let widthIdentifiers: [String]
+    let heightIdentifiers: [String]
 }
 
 struct Changes {

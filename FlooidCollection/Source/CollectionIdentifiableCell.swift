@@ -15,10 +15,18 @@ public protocol CollectionIdentifiableCell: UICollectionViewCell {
 
 public extension CollectionIdentifiableCell {
 
-    static func makeCell(identifier: String, reuseIdentifier: String = Self.reuseIdentifier, setup: @escaping (Self) -> Void) -> CollectionCellProvider {
+    static func makeCell(
+        identifier: String,
+        reuseIdentifier: String = Self.reuseIdentifier,
+        widthIdentifier: String? = nil,
+        heightIdentifier: String? = nil,
+        setup: @escaping (Self) -> Void
+    ) -> CollectionCellProvider {
         .init(
             identifier: identifier,
             reuseIdentifier: reuseIdentifier,
+            widthIdentifier: widthIdentifier,
+            heightIdentifier: heightIdentifier,
             setup: {
                 guard let cell = $0 as? Self else { return }
                 setup(cell)

@@ -14,10 +14,14 @@ public struct CollectionCellProvider {
     
     public let identifier: String
     public let reuseIdentifier: String
+    public let widthIdentifier: String
+    public let heightIdentifier: String
     
-    public init(identifier: String, reuseIdentifier: String, setup: @escaping (UICollectionViewCell)->Void) {
+    public init(identifier: String, reuseIdentifier: String, widthIdentifier: String? = nil, heightIdentifier: String? = nil, setup: @escaping (UICollectionViewCell)->Void) {
         self.identifier = identifier
         self.reuseIdentifier = reuseIdentifier
+        self.widthIdentifier = widthIdentifier ?? identifier
+        self.heightIdentifier = heightIdentifier ?? identifier
         self.setup = setup
     }
     
