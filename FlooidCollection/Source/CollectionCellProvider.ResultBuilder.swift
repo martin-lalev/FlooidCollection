@@ -32,7 +32,19 @@ public struct CollectionViewCellsArrayBuilder {
 }
 
 public extension CollectionSectionProvider {
-    init(_ identifier: String, @CollectionViewCellsArrayBuilder _ viewBuilder: () -> CollectionViewCellArrayConvertible) {
-        self.init(identifier: identifier, cellProviders: viewBuilder().items())
+    init(
+        _ identifier: String,
+        insets: UIEdgeInsets = .zero,
+        minimumLineSpacing: CGFloat = 0,
+        minimumInteritemSpacing: CGFloat = 0,
+        @CollectionViewCellsArrayBuilder _ viewBuilder: () -> CollectionViewCellArrayConvertible
+    ) {
+        self.init(
+            identifier: identifier,
+            insets: insets,
+            minimumLineSpacing: minimumLineSpacing,
+            minimumInteritemSpacing: minimumInteritemSpacing,
+            cellProviders: viewBuilder().items()
+        )
     }
 }

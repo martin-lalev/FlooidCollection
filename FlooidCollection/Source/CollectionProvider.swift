@@ -8,15 +8,26 @@
 
 import UIKit
 
+public protocol CollectionProviderScrollDelegate: AnyObject {
+    func scrollViewDidScroll(_ scrollView: UIScrollView)
+}
+
 open class CollectionProvider: NSObject {
     
+    private weak var scrollDelegate: CollectionProviderScrollDelegate?
     private var sections: [CollectionSectionProvider] = []
     
     private weak var collectionView: UICollectionView?
     
     public func provide(for collectionView: UICollectionView) {
         collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.prefetchDataSource = self
         self.collectionView = collectionView
+    }
+    
+    public func assignScrollDelegate(to scrollDelegate: CollectionProviderScrollDelegate? = nil) {
+        self.scrollDelegate = scrollDelegate
     }
     
     
@@ -57,7 +68,7 @@ open class CollectionProvider: NSObject {
     }
 }
 
-extension CollectionProvider: UICollectionViewDataSource {
+extension CollectionProvider: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDataSourcePrefetching {
     
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return self.sections.count
@@ -72,7 +83,55 @@ extension CollectionProvider: UICollectionViewDataSource {
         self[indexPath].setup(cell)
         return cell
     }
+
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard indexPath.row < self[indexPath.section].cellProviders.count else { return }
+        self[indexPath].willShow(cell)
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard indexPath.row < self[indexPath.section].cellProviders.count else { return }
+        self[indexPath].didHide(cell)
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            guard indexPath.row < self[indexPath.section].cellProviders.count else { continue }
+            self[indexPath].prefetch()
+        }
+    }
     
+    public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            guard indexPath.row < self[indexPath.section].cellProviders.count else { continue }
+            self[indexPath].cancelPrefetch()
+        }
+    }
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.scrollDelegate?.scrollViewDidScroll(scrollView)
+    }
+
+}
+
+extension CollectionProvider: UICollectionViewDelegateFlowLayout {
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        self[indexPath].size(collectionView: collectionView)
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        self.sections[section].insets
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        self.sections[section].minimumLineSpacing
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        self.sections[section].minimumInteritemSpacing
+    }
+
 }
 
 private extension CollectionSectionProvider {
