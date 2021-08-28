@@ -10,6 +10,17 @@ import UIKit
 
 public protocol CollectionProviderScrollDelegate: AnyObject {
     func scrollViewDidScroll(_ scrollView: UIScrollView)
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>)
+}
+public extension CollectionProviderScrollDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) { }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { }
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { }
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) { }
 }
 
 open class CollectionProvider: NSObject {
@@ -110,6 +121,22 @@ extension CollectionProvider: UICollectionViewDataSource, UICollectionViewDelega
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.scrollDelegate?.scrollViewDidScroll(scrollView)
+    }
+    
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.scrollDelegate?.scrollViewDidEndDecelerating(scrollView)
+    }
+    
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        self.scrollDelegate?.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
+    }
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.scrollDelegate?.scrollViewWillBeginDragging(scrollView)
+    }
+    
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.scrollDelegate?.scrollViewWillEndDragging(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
     }
 
 }
