@@ -33,11 +33,12 @@ extension UICollectionView {
             self.applyToSections(Changes.make(from: sectionsFrom, to: sectionsTo))
             
             for sectionIdentifier in Set(sectionsTo).intersection(sectionsFrom) {
-                let sectionIndex = new.firstIndex(where: { $0.identifier == sectionIdentifier })!
+                let oldSectionIndex = old.firstIndex(where: { $0.identifier == sectionIdentifier })!
+                let newSectionIndex = new.firstIndex(where: { $0.identifier == sectionIdentifier })!
                 let cellsFrom = old.first(where: { $0.identifier == sectionIdentifier })!.cellIdentifiers
                 let cellsTo = new.first(where: { $0.identifier == sectionIdentifier })!.cellIdentifiers
                 
-                self.applyToCells(Changes.make(from: cellsFrom, to: cellsTo), at: sectionIndex)
+                self.applyToCells(Changes.make(from: cellsFrom, to: cellsTo), at: (old: oldSectionIndex, new: newSectionIndex))
             }
         }, animations: animations, completed)
     }
@@ -48,10 +49,10 @@ extension UICollectionView {
         for move in changes.moved { self.moveSection(move.from, toSection: move.to) }
     }
     
-    private func applyToCells(_ changes: Changes, at sectionIndex: Int) {
-        self.deleteItems(at: changes.deleted.map { IndexPath(row: $0, section: sectionIndex) })
-        self.insertItems(at: changes.inserted.map { IndexPath(row: $0, section: sectionIndex) })
-        for move in changes.moved { self.moveItem(at: IndexPath(row: move.from, section: sectionIndex), to: IndexPath(row: move.to, section: sectionIndex)) }
+    private func applyToCells(_ changes: Changes, at sectionIndex: (old: Int, new: Int)) {
+        self.deleteItems(at: changes.deleted.map { IndexPath(row: $0, section: sectionIndex.old) })
+        self.insertItems(at: changes.inserted.map { IndexPath(row: $0, section: sectionIndex.new) })
+        for move in changes.moved { self.moveItem(at: IndexPath(row: move.from, section: sectionIndex.old), to: IndexPath(row: move.to, section: sectionIndex.new)) }
     }
     
 }

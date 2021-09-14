@@ -35,6 +35,10 @@ open class CollectionProvider: NSObject {
         collectionView.delegate = self
         collectionView.prefetchDataSource = self
         self.collectionView = collectionView
+        
+        // If this is not done, number of sections is incorrectly 1,
+        //   instead of the actual number of sections in the dataSource
+        _  = collectionView.numberOfSections
     }
     
     public func assignScrollDelegate(to scrollDelegate: CollectionProviderScrollDelegate? = nil) {
