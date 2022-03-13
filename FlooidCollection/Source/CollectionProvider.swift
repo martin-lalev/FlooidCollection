@@ -71,15 +71,17 @@ open class CollectionProvider: NSObject {
             return
         }
         
-        collectionView.update(old: old, new: new, animations: {
-            for indexPath in collectionView.indexPathsForVisibleItems {
-                if let cell = collectionView.cellForItem(at: indexPath) {
-                    self[indexPath].setup(cell)
+        DispatchQueue.main.async {
+            collectionView.update(old: old, new: new, animations: {
+                for indexPath in collectionView.indexPathsForVisibleItems {
+                    if let cell = collectionView.cellForItem(at: indexPath) {
+                        self[indexPath].setup(cell)
+                    }
                 }
-            }
-            otherAnimations()
-            
-        }, completed)
+                otherAnimations()
+                
+            }, completed)
+        }
     }
 }
 
