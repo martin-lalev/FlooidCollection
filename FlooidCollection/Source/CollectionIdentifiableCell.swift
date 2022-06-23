@@ -91,12 +91,12 @@ public extension CollectionIdentifiableCell {
 
 extension UICollectionView {
     
-    open func register(_ cellTypes: [CollectionIdentifiableCell.Type] = []) {
+    public func register(_ cellTypes: [CollectionIdentifiableCell.Type] = []) {
         for cellType in cellTypes {
             cellType.register(in: self)
         }
     }
-    open func register(_ cellTypes: CollectionIdentifiableCell.Type ...) {
+    public func register(_ cellTypes: CollectionIdentifiableCell.Type ...) {
         self.register(cellTypes)
     }
 
