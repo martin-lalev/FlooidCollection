@@ -71,7 +71,7 @@ open class CollectionProvider: NSObject {
             return
         }
         
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
             collectionView.update(old: old, new: new, animations: {
                 for indexPath in collectionView.indexPathsForVisibleItems {
                     if let cell = collectionView.cellForItem(at: indexPath) {
@@ -81,7 +81,7 @@ open class CollectionProvider: NSObject {
                 otherAnimations()
                 
             }, completed)
-        }
+//        }
     }
 }
 
