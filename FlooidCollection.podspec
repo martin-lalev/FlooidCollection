@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "FlooidCollection"
-s.version      = "1.0.14"
+s.version      = "1.0.15"
 s.summary      = "UICollectionView framework for declerative data source creation."
 s.description  = "UICollectionView framework for declerative data source creation."
 s.homepage     = "http://github.com/martin-lalev/FlooidCollection"

@@ -61,7 +61,19 @@ open class CollectionProvider: NSObject {
     
     // MARK: - Reloading
 
+    var registeredIdentifiers: [String] = []
+
     public func reloadData(sections: [CollectionSectionProvider], otherAnimations: @escaping () -> Void = { }, completed: @escaping () -> Void = { }) {
+        if let collectionView = self.collectionView {
+            for section in sections {
+                for cell in section.cellProviders {
+                    guard !self.registeredIdentifiers.contains(cell.reuseIdentifier) else { continue }
+                    self.registeredIdentifiers.append(cell.reuseIdentifier)
+                    cell.register(in: collectionView)
+                }
+            }
+        }
+
         let old = self.sections.map { $0.asDiffableSection() }
         self.sections = sections
         let new = self.sections.map { $0.asDiffableSection() }

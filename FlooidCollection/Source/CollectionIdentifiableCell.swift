@@ -8,16 +8,12 @@
 
 import UIKit
 
-public protocol CollectionIdentifiableCell: UICollectionViewCell {
-    static var reuseIdentifier: String { get }
-    static func register(in view: UICollectionView)
-}
+public protocol CollectionIdentifiableCell: UICollectionViewCell {}
 
 public extension CollectionIdentifiableCell {
     
     static func makeHorizontalCell(
         identifier: String,
-        reuseIdentifier: String = Self.reuseIdentifier,
         widthIdentifier: String? = nil,
         heightIdentifier: String? = nil,
         width: CollectionCellProvider.SizeMeasurement,
@@ -30,9 +26,9 @@ public extension CollectionIdentifiableCell {
     ) -> CollectionCellProvider {
         .init(
             identifier: identifier,
-            reuseIdentifier: reuseIdentifier,
             widthIdentifier: widthIdentifier,
             heightIdentifier: heightIdentifier,
+            cellType: Self.self,
             size: .init(width: width, height: height),
             willShow: {
                 guard let cell = $0 as? Self else { return }
@@ -53,7 +49,6 @@ public extension CollectionIdentifiableCell {
     
     static func makeVerticalCell(
         identifier: String,
-        reuseIdentifier: String = Self.reuseIdentifier,
         widthIdentifier: String? = nil,
         heightIdentifier: String? = nil,
         width: CollectionCellProvider.SizeMeasurement = .relativeToCollectionWidth(1),
@@ -66,9 +61,9 @@ public extension CollectionIdentifiableCell {
     ) -> CollectionCellProvider {
         .init(
             identifier: identifier,
-            reuseIdentifier: reuseIdentifier,
             widthIdentifier: widthIdentifier,
             heightIdentifier: heightIdentifier,
+            cellType: Self.self,
             size: .init(width: width, height: height),
             willShow: {
                 guard let cell = $0 as? Self else { return }
@@ -85,19 +80,6 @@ public extension CollectionIdentifiableCell {
                 setup(cell)
             }
         )
-    }
-
-}
-
-extension UICollectionView {
-    
-    public func register(_ cellTypes: [CollectionIdentifiableCell.Type] = []) {
-        for cellType in cellTypes {
-            cellType.register(in: self)
-        }
-    }
-    public func register(_ cellTypes: CollectionIdentifiableCell.Type ...) {
-        self.register(cellTypes)
     }
 
 }

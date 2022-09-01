@@ -54,13 +54,15 @@ public struct CollectionCellProvider {
     public let widthIdentifier: String
     public let heightIdentifier: String
     
+    public let cellType: CollectionIdentifiableCell.Type
+    
     private let size: Size?
 
     public init(
         identifier: String,
-        reuseIdentifier: String,
         widthIdentifier: String? = nil,
         heightIdentifier: String? = nil,
+        cellType: CollectionIdentifiableCell.Type,
         size: @autoclosure () -> Size? = nil,
         willShow: @escaping (UICollectionViewCell)->Void = { _ in },
         didHide: @escaping (UICollectionViewCell)->Void = { _ in },
@@ -69,9 +71,10 @@ public struct CollectionCellProvider {
         setup: @escaping (UICollectionViewCell) -> Void
     ) {
         self.identifier = identifier
-        self.reuseIdentifier = reuseIdentifier
+        self.reuseIdentifier = cellType.description()
         self.widthIdentifier = widthIdentifier ?? identifier
         self.heightIdentifier = heightIdentifier ?? identifier
+        self.cellType = cellType
         self.size = size()
         self.setup = setup
         self.willShow = willShow
@@ -132,6 +135,12 @@ public struct CollectionCellProvider {
         return .init(width: width, height: height)
     }
     
+}
+
+extension CollectionCellProvider {
+    func register(in collectionView: UICollectionView) {
+        collectionView.register(self.cellType, forCellWithReuseIdentifier: self.reuseIdentifier)
+    }
 }
 
 extension CollectionCellProvider: Identifiable {
