@@ -29,6 +29,10 @@ public struct CollectionViewCellsArrayBuilder {
 
     public static func buildEither(second: CollectionViewCellArrayConvertible) -> CollectionViewCellArrayConvertible { second }
 
+    public static func buildArray(_ components: CollectionViewCellArrayConvertible) -> CollectionViewCellArrayConvertible { components }
+
+    public static func buildArray(_ components: [CollectionViewCellArrayConvertible]) -> CollectionViewCellArrayConvertible { components.flatMap { $0.items() } }
+    
 }
 
 public extension CollectionSectionProvider {
