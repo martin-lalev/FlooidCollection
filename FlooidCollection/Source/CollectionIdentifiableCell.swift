@@ -14,6 +14,7 @@ public extension CollectionIdentifiableCell {
     
     static func makeHorizontalCell(
         identifier: String,
+        reuseIdentifier: String? = nil,
         widthIdentifier: String? = nil,
         heightIdentifier: String? = nil,
         width: CollectionCellProvider.SizeMeasurement,
@@ -26,6 +27,7 @@ public extension CollectionIdentifiableCell {
     ) -> CollectionCellProvider {
         .init(
             identifier: identifier,
+            reuseIdentifier: reuseIdentifier,
             widthIdentifier: widthIdentifier,
             heightIdentifier: heightIdentifier,
             cellType: Self.self,
@@ -49,6 +51,7 @@ public extension CollectionIdentifiableCell {
     
     static func makeVerticalCell(
         identifier: String,
+        reuseIdentifier: String? = nil,
         widthIdentifier: String? = nil,
         heightIdentifier: String? = nil,
         width: CollectionCellProvider.SizeMeasurement = .relativeToCollectionWidth(1),
@@ -61,6 +64,7 @@ public extension CollectionIdentifiableCell {
     ) -> CollectionCellProvider {
         .init(
             identifier: identifier,
+            reuseIdentifier: reuseIdentifier,
             widthIdentifier: widthIdentifier,
             heightIdentifier: heightIdentifier,
             cellType: Self.self,

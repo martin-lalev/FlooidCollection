@@ -60,6 +60,7 @@ public struct CollectionCellProvider {
 
     public init(
         identifier: String,
+        reuseIdentifier: String? = nil,
         widthIdentifier: String? = nil,
         heightIdentifier: String? = nil,
         cellType: CollectionIdentifiableCell.Type,
@@ -71,7 +72,7 @@ public struct CollectionCellProvider {
         setup: @escaping (UICollectionViewCell) -> Void
     ) {
         self.identifier = identifier
-        self.reuseIdentifier = cellType.description()
+        self.reuseIdentifier = reuseIdentifier ?? cellType.description()
         self.widthIdentifier = widthIdentifier ?? identifier
         self.heightIdentifier = heightIdentifier ?? identifier
         self.cellType = cellType
