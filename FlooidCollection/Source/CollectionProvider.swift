@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 public protocol CollectionProviderScrollDelegate: AnyObject {
     func scrollViewDidScroll(_ scrollView: UIScrollView)
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
@@ -23,6 +24,7 @@ public extension CollectionProviderScrollDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) { }
 }
 
+@MainActor
 open class CollectionProvider: NSObject {
     
     private weak var scrollDelegate: CollectionProviderScrollDelegate?

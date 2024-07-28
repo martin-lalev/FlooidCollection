@@ -12,6 +12,7 @@ public protocol CollectionIdentifiableCell: UICollectionViewCell {}
 
 public extension CollectionIdentifiableCell {
     
+    @MainActor
     static func makeHorizontalCell(
         identifier: String,
         reuseIdentifier: String? = nil,
@@ -49,6 +50,7 @@ public extension CollectionIdentifiableCell {
         )
     }
     
+    @MainActor
     static func makeVerticalCell(
         identifier: String,
         reuseIdentifier: String? = nil,

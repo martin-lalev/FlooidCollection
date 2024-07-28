@@ -8,9 +8,11 @@
 
 import UIKit
 
+@MainActor
 public protocol CollectionViewCellArrayConvertible {
     func items() -> [CollectionCellProvider]
 }
+@MainActor
 extension CollectionCellProvider: CollectionViewCellArrayConvertible {
     public func items() -> [CollectionCellProvider] { [self] }
 }
@@ -18,6 +20,7 @@ extension Array: CollectionViewCellArrayConvertible where Element == CollectionC
     public func items() -> [CollectionCellProvider] { self }
 }
 
+@MainActor
 @resultBuilder
 public struct CollectionViewCellsArrayBuilder {
 
@@ -35,6 +38,7 @@ public struct CollectionViewCellsArrayBuilder {
     
 }
 
+@MainActor
 public extension CollectionSectionProvider {
     init(
         _ identifier: String,

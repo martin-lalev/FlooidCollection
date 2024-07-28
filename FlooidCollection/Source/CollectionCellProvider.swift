@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 public struct CollectionCellProvider {
     
     public enum SizeMeasurement {
@@ -145,5 +146,5 @@ extension CollectionCellProvider {
 }
 
 extension CollectionCellProvider: Identifiable {
-    public var id: String { self.identifier }
+    public nonisolated var id: String { self.identifier }
 }
